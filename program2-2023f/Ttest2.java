@@ -1,6 +1,9 @@
 public class Ttest2 {
     public static void main(String args[]){
         Test newtest = new Test();
-        newtest.insert(0);
+        newtest.insert("a");
+        newtest.insert("a");
+        newtest.insert("abc");
+        newtest.print();
     }
 }

@@ -1,25 +1,79 @@
+import java.util.Stack;
+
 public class Test {
-    Node tree;
+  Node tree;
 
-    private class Node{
-        int key;
-        Node left;
-        Node right;
+  private class Node{
+      String key;
+      Node left;
+      Node right;
+      int frequency;
+      int access_count;
 
-        public Node(int data){
-            key = data;
-            left = null;
-            right = null;
+      public Node(String data){
+          key = data;
+          left = null;
+          right = null;
+          frequency = 0;
+          access_count = 0;
+      }
+  }
+
+  public Test(){
+      tree = null;
+  }
+
+  public void insert(String key) {
+    if(tree == null){ // When tree is empty
+        tree = new Node(key);
+        tree.frequency++;
+    } else { //When tree is not empty
+      Node present_node = tree;
+      while(true){
+        if(present_node.key.compareTo(key) > 0){// When new key is smaller than present node's key
+          if(present_node.left == null){
+            Node tmp = new Node(key);
+            tmp.frequency++;
+            present_node.left = tmp;
+            break;
+          }
+          else{
+            present_node = present_node.left;
+          }
         }
-    }
-
-    public Test(){
-        tree = null;
-    }
-
-    public void insert(int data){
-        if(tree == null){
-            tree = new Node(data);
+        else if(present_node.key.compareTo(key) < 0){
+          if(present_node.right == null){
+            Node tmp = new Node(key);
+            tmp.frequency++;
+            present_node.right = tmp;
+            break;
+          }
+          else{
+            present_node = present_node.right;
+          }
         }
+        else{ // If the key is same as present_node's key, then just +1 to frequency
+          present_node.frequency++;
+          break;
+        }
+      } // End of While
     }
+  }
+  public void print() { //print in Inorder
+    if(tree == null){
+      return;
+    }
+    Stack<Node> stack = new Stack<>();
+    Node currNode = tree;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      System.out.println(currNode.key + currNode.frequency);
+      currNode = currNode.right;
+    }
+  }
+
 }
