@@ -3,14 +3,15 @@ import java.util.Stack;
 public class Test {
   Node tree;
   int size_tree = 0;
-  int sumWP = 0;
 
-  private class Node{
+  public class Node{
       String key;
       Node left;
       Node right;
       int frequency;
       int access_count;
+      int level;
+      int height;
 
       public Node(String data){
           key = data;
@@ -18,6 +19,8 @@ public class Test {
           right = null;
           frequency = 0;
           access_count = 0;
+          level = 0;
+          height = 0;
       }
   }
 
@@ -25,12 +28,17 @@ public class Test {
       tree = null;
   }
 
-  public void insert(String key) {
+  public int height(Node tree){
+    if(tree == null) {return 0;}
+    return tree.height;
+  }
+
+  /*public void insert(String key) {
     if(tree == null){ // When tree is empty
         tree = new Node(key);
         size_tree++;
         tree.frequency++;
-        sumWP++;
+        tree.level = 1;
     } else { //When tree is not empty
       Node present_node = tree;
       int level = 1;
@@ -41,7 +49,7 @@ public class Test {
             Node tmp = new Node(key);
             size_tree++;
             tmp.frequency++;
-            sumWP += level;
+            tmp.level = level;
             present_node.left = tmp;
             break;
           }
@@ -55,7 +63,7 @@ public class Test {
             Node tmp = new Node(key);
             size_tree++;
             tmp.frequency++;
-            sumWP += level;
+            tmp.level = level;
             present_node.right = tmp;
             break;
           }
@@ -65,7 +73,53 @@ public class Test {
         }
         else{ // If the key is same as present_node's key, then just +1 to frequency
           present_node.frequency++;
-          sumWP += level;
+          break;
+        }
+      } // End of While
+    }
+  }*/
+
+  public void insert(String key) {
+    if(tree == null){ // When tree is empty
+        tree = new Node(key);
+        size_tree++;
+        tree.frequency++;
+        tree.level = 1;
+        tree.height = 0;
+    } else { //When tree is not empty
+      Node present_node = tree;
+      int level = 1;
+      while(true){
+        if(present_node.key.compareTo(key) > 0){// When new key is smaller than present node's key
+          level++;
+          if(present_node.left == null){
+            Node tmp = new Node(key);
+            size_tree++;
+            tmp.frequency++;
+            tmp.level = level;
+            present_node.left = tmp;
+            break;
+          }
+          else{
+            present_node = present_node.left;
+          }
+        }
+        else if(present_node.key.compareTo(key) < 0){
+          level++;
+          if(present_node.right == null){
+            Node tmp = new Node(key);
+            size_tree++;
+            tmp.frequency++;
+            tmp.level = level;
+            present_node.right = tmp;
+            break;
+          }
+          else{
+            present_node = present_node.right;
+          }
+        }
+        else{ // If the key is same as present_node's key, then just +1 to frequency
+          present_node.frequency++;
           break;
         }
       } // End of While
@@ -108,7 +162,7 @@ public class Test {
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]");
+      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]" + " " + currNode.level);
       currNode = currNode.right;
     }
   }
@@ -161,7 +215,6 @@ public class Test {
     }
     Stack<Node> stack = new Stack<>();
     Node currNode = tree;
-    sumWP = 0;
     while(currNode != null || !stack.empty()){
       while(currNode != null){
         stack.push(currNode);
@@ -176,7 +229,22 @@ public class Test {
   }
 
   public int sumWeightedPath() {
-    return sumWP;
+    if(tree == null){
+      return 0;
+    }
+    Stack<Node> stack = new Stack<>();
+    Node currNode = tree;
+    int wp = 0;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      wp += currNode.level * currNode.frequency;
+      currNode = currNode.right;
+    }
+    return wp;
   }
 
 }

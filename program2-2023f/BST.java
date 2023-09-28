@@ -6,9 +6,8 @@ public class BST { // Binary Search Tree implementation
 
   protected boolean NOBSTified = false;
   protected boolean OBSTified = false;
-  Node root;
+  protected Node root;
   int size_tree = 0;
-  int sumWP = 0;
 
   protected class Node {
     String key;
@@ -16,6 +15,7 @@ public class BST { // Binary Search Tree implementation
     Node right;
     int frequency;
     int access_count;
+    int level;
 
     public Node(String data){
         key = new String(data);
@@ -23,6 +23,7 @@ public class BST { // Binary Search Tree implementation
         right = null;
         access_count = 0;
         frequency = 0;
+        level = 0;
     }
   }
 
@@ -70,7 +71,22 @@ public class BST { // Binary Search Tree implementation
     return access_cnt;
   }
   public int sumWeightedPath() {
-    return sumWP;
+    if(root == null){
+      return 0;
+    }
+    int wp = 0;
+    Stack<Node> stack = new Stack<>();
+    Node currNode = root;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      wp+=currNode.frequency * currNode.level;
+      currNode = currNode.right;
+    }
+    return wp;
   }
   public void resetCounters() {
     if(root == null){
@@ -78,7 +94,6 @@ public class BST { // Binary Search Tree implementation
     }
     Stack<Node> stack = new Stack<>();
     Node currNode = root;
-    sumWP = 0;
     while(currNode != null || !stack.empty()){
       while(currNode != null){
         stack.push(currNode);
@@ -100,8 +115,7 @@ public class BST { // Binary Search Tree implementation
         root = new Node(key);
         root.frequency++;
         size_tree++;
-        sumWP++;
-        System.out.println("sumWP: " + sumWP);
+        root.level = 1;
     } else { //When tree is not empty
       Node present_node = root;
       int level = 1;
@@ -112,7 +126,7 @@ public class BST { // Binary Search Tree implementation
             Node tmp = new Node(key);
             size_tree++;
             tmp.frequency++;
-            sumWP += level;
+            tmp.level = level;
             present_node.left = tmp;
             break;
           }
@@ -126,7 +140,7 @@ public class BST { // Binary Search Tree implementation
             Node tmp = new Node(key);
             size_tree++;
             tmp.frequency++;
-            sumWP += level;
+            tmp.level = level;
             present_node.right = tmp;
             break;
           }
@@ -136,7 +150,6 @@ public class BST { // Binary Search Tree implementation
         }
         else{ // If the key is same as present_node's key, then just +1 to frequency
           present_node.frequency++;
-          sumWP += level;
           break;
         }
       } // End of While

@@ -3,7 +3,6 @@
   
 public class AVL extends BST
 {
-  Node root;
   public AVL() {
     root = null;
   }
