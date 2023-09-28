@@ -10,7 +10,7 @@ public class BST { // Binary Search Tree implementation
   int size_tree = 0;
   int sumWP = 0;
 
-  private class Node {
+  protected class Node {
     String key;
     Node left;
     Node right;

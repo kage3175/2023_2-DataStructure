@@ -3,7 +3,10 @@
   
 public class AVL extends BST
 {
-  public AVL() { }
+  Node root;
+  public AVL() {
+
+  }
   
   public void insert(String key) { }
  
