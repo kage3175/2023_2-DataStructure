@@ -101,6 +101,7 @@ public class BST { // Binary Search Tree implementation
         root.frequency++;
         size_tree++;
         sumWP++;
+        System.out.println("sumWP: " + sumWP);
     } else { //When tree is not empty
       Node present_node = root;
       int level = 1;
@@ -125,7 +126,7 @@ public class BST { // Binary Search Tree implementation
             Node tmp = new Node(key);
             size_tree++;
             tmp.frequency++;
-            sumWP++;
+            sumWP += level;
             present_node.right = tmp;
             break;
           }
@@ -180,7 +181,7 @@ public class BST { // Binary Search Tree implementation
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      System.out.println(currNode.key + currNode.frequency);
+      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]");
       currNode = currNode.right;
     }
   } // End of print
