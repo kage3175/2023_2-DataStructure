@@ -108,7 +108,7 @@ public class Test {
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      System.out.println(currNode.key + " " + currNode.frequency + " " + currNode.access_count);
+      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]");
       currNode = currNode.right;
     }
   }
