@@ -2,6 +2,8 @@ import java.util.Stack;
 
 public class Test {
   Node tree;
+  int size_tree = 0;
+  int sumWP = 0;
 
   private class Node{
       String key;
@@ -26,14 +28,20 @@ public class Test {
   public void insert(String key) {
     if(tree == null){ // When tree is empty
         tree = new Node(key);
+        size_tree++;
         tree.frequency++;
+        sumWP++;
     } else { //When tree is not empty
       Node present_node = tree;
+      int level = 1;
       while(true){
         if(present_node.key.compareTo(key) > 0){// When new key is smaller than present node's key
+          level++;
           if(present_node.left == null){
             Node tmp = new Node(key);
+            size_tree++;
             tmp.frequency++;
+            sumWP += level;
             present_node.left = tmp;
             break;
           }
@@ -42,9 +50,12 @@ public class Test {
           }
         }
         else if(present_node.key.compareTo(key) < 0){
+          level++;
           if(present_node.right == null){
             Node tmp = new Node(key);
+            size_tree++;
             tmp.frequency++;
+            sumWP += level;
             present_node.right = tmp;
             break;
           }
@@ -54,6 +65,7 @@ public class Test {
         }
         else{ // If the key is same as present_node's key, then just +1 to frequency
           present_node.frequency++;
+          sumWP += level;
           break;
         }
       } // End of While
@@ -99,6 +111,72 @@ public class Test {
       System.out.println(currNode.key + " " + currNode.frequency + " " + currNode.access_count);
       currNode = currNode.right;
     }
+  }
+
+  public int sumFreq() {
+    if(tree == null){
+      return 0;
+    }
+    int freq = 0;
+    Stack<Node> stack = new Stack<>();
+    Node currNode = tree;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      freq+=currNode.frequency;
+      currNode = currNode.right;
+    }
+    return freq;
+  }
+
+  public int size(){
+    return size_tree;
+  }
+
+  public int sumProbes() {
+    if(tree == null){
+      return 0;
+    }
+    int access_cnt = 0;
+    Stack<Node> stack = new Stack<>();
+    Node currNode = tree;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      access_cnt+=currNode.access_count;
+      currNode = currNode.right;
+    }
+    return access_cnt;
+  }
+
+  public void resetCounters() {
+    if(tree == null){
+      return;
+    }
+    Stack<Node> stack = new Stack<>();
+    Node currNode = tree;
+    sumWP = 0;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      currNode.frequency = 0;
+      currNode.access_count = 0;
+      currNode = currNode.right;
+    }
+    return;
+  }
+
+  public int sumWeightedPath() {
+    return sumWP;
   }
 
 }
