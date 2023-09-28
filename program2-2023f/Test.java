@@ -59,6 +59,31 @@ public class Test {
       } // End of While
     }
   }
+
+  public boolean find(String key) {
+    if(tree == null) {return false;}
+    Node currNode = tree;
+    while(currNode != null){
+      currNode.access_count++;
+      if(currNode.key.compareTo(key) == 0){
+        return true;
+      }
+      else if(currNode.key.compareTo(key) > 0){ // finding key is smaller than currNode's key
+        if(currNode.left == null) {return false;}
+        else{
+          currNode = currNode.left;
+        }
+      }
+      else{
+        if(currNode.right == null) {return false;}
+        else{
+          currNode = currNode.right;
+        }
+      }
+    }
+    return false;
+  }
+
   public void print() { //print in Inorder
     if(tree == null){
       return;
@@ -71,7 +96,7 @@ public class Test {
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      System.out.println(currNode.key + currNode.frequency);
+      System.out.println(currNode.key + " " + currNode.frequency + " " + currNode.access_count);
       currNode = currNode.right;
     }
   }

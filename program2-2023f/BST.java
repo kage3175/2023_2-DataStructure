@@ -33,6 +33,14 @@ public class BST { // Binary Search Tree implementation
   }
 
   public int size() { }
+  public int sumFreq() { }
+  public int sumProbes() { }
+  public int sumWeightedPath() { }
+  public void resetCounters() { }
+
+  public void nobst() { }	// Set NOBSTified to true.
+  public void obst() { }	// Set OBSTified to true.
+
   public void insert(String key) {
     if(root == null){ // When tree is empty
         root = new Node(key);
@@ -68,16 +76,34 @@ public class BST { // Binary Search Tree implementation
         }
       } // End of While
     }
-  }
-  public boolean find(String key) { }
+  } //End of insert
 
-  public int sumFreq() { }
-  public int sumProbes() { }
-  public int sumWeightedPath() { }
-  public void resetCounters() { }
+  public boolean find(String key) {
+    if(root == null) {return false;}
+    Node currNode = root;
+    while(currNode != null){
+      currNode.access_count++;
+      if(currNode.key.compareTo(key) == 0){
+        return true;
+      }
+      else if(currNode.key.compareTo(key) > 0){ // finding key is smaller than currNode's key
+        if(currNode.left == null) return false;
+        else{
+          currNode = currNode.left;
+        }
+      }
+      else{
+        if(currNode.right == null) return false;
+        else{
+          currNode = currNode.right;
+        }
+      }
+    }
+    return false;
+  } // End of find
 
-  public void nobst() { }	// Set NOBSTified to true.
-  public void obst() { }	// Set OBSTified to true.
+  
+
   public void print() { //print in Inorder
     if(root == null){
       return;
@@ -93,7 +119,7 @@ public class BST { // Binary Search Tree implementation
       System.out.println(currNode.key + currNode.frequency);
       currNode = currNode.right;
     }
-  } 
+  } // End of print
 
 }
 
