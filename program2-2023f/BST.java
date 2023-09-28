@@ -16,6 +16,7 @@ public class BST { // Binary Search Tree implementation
     int frequency;
     int access_count;
     int level;
+    int height;
 
     public Node(String data){
         key = new String(data);
@@ -24,6 +25,7 @@ public class BST { // Binary Search Tree implementation
         access_count = 0;
         frequency = 0;
         level = 0;
+        height = 1;
     }
   }
 

@@ -20,7 +20,7 @@ public class Test {
           frequency = 0;
           access_count = 0;
           level = 0;
-          height = 0;
+          height = 1;
       }
   }
 
@@ -85,7 +85,6 @@ public class Test {
         size_tree++;
         tree.frequency++;
         tree.level = 1;
-        tree.height = 0;
     } else { //When tree is not empty
       Node present_node = tree;
       int level = 1;
@@ -162,7 +161,7 @@ public class Test {
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]" + " " + currNode.level);
+      System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + ":" + currNode.level + ":" + currNode.height + "]");
       currNode = currNode.right;
     }
   }

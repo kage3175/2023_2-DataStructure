@@ -30,11 +30,16 @@ public class Test_AVL extends Test{
           tmp.level = level;
           present_node.left = tmp;
           stack.push(present_node);
+          while(!stack.isEmpty()){
+            
+            Node node = stack.pop();
+            updateHeight(node);
+          }
           break;
         }
         else{
           parent = present_node;
-          stack.push(present_node)
+          stack.push(parent);
           present_node = present_node.left;
         }
       }
@@ -46,11 +51,16 @@ public class Test_AVL extends Test{
           tmp.frequency++;
           tmp.level = level;
           present_node.right = tmp;
+          stack.push(present_node);
+          while(!stack.isEmpty()){
+            Node node = stack.pop();
+            updateHeight(node);
+          }
           break;
         }
         else{
           parent = present_node;
-          stack.push(present_node)
+          stack.push(parent);
           present_node = present_node.right;
         }
       }
