@@ -23,7 +23,7 @@ public class BST { // Binary Search Tree implementation
         left = null;
         right = null;
         access_count = 0;
-        frequency = 0;
+        frequency = 1;
         level = 0;
         height = 1;
     }
@@ -66,7 +66,6 @@ public class BST { // Binary Search Tree implementation
     if(root == null){ // When tree is empty
       root = new Node(key);
       size_tree++;
-      root.frequency++;
       root.level = 1;
     } 
     else{ //When tree is not empty

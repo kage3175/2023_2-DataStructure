@@ -1,16 +1,12 @@
-// AVL Binary Search Tree
-// Bongki Moon (bkmoon@snu.ac.kr)
-
 import java.util.Stack;
 
-public class AVL extends BST
-{
-  public AVL() {
+public class AVL extends BST{
+  public AVL(){
     root = null;
   }
 
-  public void updateHeight(Node tree){
-    tree.height = 1 + Math.max(height(tree.left), height(tree.right));
+  public void updateHeight(Node root){
+    root.height = 1 + Math.max(height(root.left), height(root.right));
   }
 
   public void updateLevel(Node node, int factor){
@@ -28,6 +24,8 @@ public class AVL extends BST
   }
 
   public Node rightRotate(Node z){
+    boolean flag = false;
+    if(z == root) {flag = true;}
     Node y = z.left;
     Node b = y.right;
     y.right = z;
@@ -41,22 +39,28 @@ public class AVL extends BST
     z.height = 1 + Math.max(height(z.right), height(b));
     y.height = 1 + Math.max(height(z), height(y.left));
 
+    if(flag) {root = y;}
+
     return y;
   }
 
   public Node leftRotate(Node z){
+    boolean flag = false;
+    if(z == root) {flag = true;}
     Node y = z.right;
-    Node a = y.left;
+    Node tmp = y.left;
     y.left = z;
-    z.right = a;
+    z.right = tmp;
 
     y.level--;
     z.level++;
     updateLevel(z.left, 1);
     updateLevel(y.right, -1);
 
-    z.height = 1 + Math.max(height(z.left), height(a));
-    y.height = 1 + Math.max(height(z), height(y.right));
+    z.height = 1 + Math.max(height(z.left), height(z.right));
+    y.height = 1 + Math.max(height(y.left), height(y.right));
+
+    if(flag) {root = y;}
 
     return y;
   }
@@ -69,10 +73,10 @@ public class AVL extends BST
     if(root == null){ // When root is empty
       root = new Node(key);
       size_tree++;
-      root.frequency++;
       root.level = 1;
     }
     else{ //When root is not empty
+
       Stack<Node> stack = new Stack<>();
       Node present_node = root;
       Node parent = null;
@@ -115,21 +119,34 @@ public class AVL extends BST
           //System.out.println("track: " + node.key + " " + balance);
 
           if(balance > 1 && node.left.key.compareTo(key) > 0){ //LL
+            //System.out.println("---- Before LL ----");
+            //print();
             node = rightRotate(node);
+            //System.out.println("---- After LL ----");
+            //print();
           }
           else if(balance > 1 && node.left.key.compareTo(key) < 0){ //LR
+            //System.out.println("---- Before LR ----");
+            //print();
             node.left = leftRotate(node.left);
             node = rightRotate(node);
+            //System.out.println("---- After LR ----");
+            //print();
           }
           else if(balance < -1 && node.right.key.compareTo(key) < 0){ //RR
-            //System.out.println(node.key + "RR");
+            //System.out.println("---- Before RR ----");
+            //print();
             node = leftRotate(node);
-            //System.out.println(node.key);
+            //System.out.println("---- After RR ----");
+            //print();
           }
           else if(balance < -1 && node.right.key.compareTo(key) > 0){ //RL
-            //System.out.println(node.key + "RL");
+            //System.out.println("---- Before RL ----");
+            //print();
             node.right = rightRotate(node.right);
             node = leftRotate(node);
+            //System.out.println("---- After RL ----");
+            //print();
           }
 
           if(!stack.isEmpty()){ //update parent node, especially for the case of rotation. If rotation didn't occr, then it will change nothing.
@@ -148,4 +165,3 @@ public class AVL extends BST
     }
   }
 }
-

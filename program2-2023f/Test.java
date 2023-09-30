@@ -17,7 +17,7 @@ public class Test {
           key = new String(data);
           left = null;
           right = null;
-          frequency = 0;
+          frequency = 1;
           access_count = 0;
           level = 0;
           height = 1;
@@ -61,7 +61,6 @@ public class Test {
     if(tree == null){ // When tree is empty
       tree = new Node(key);
       size_tree++;
-      tree.frequency++;
       tree.level = 1;
     } 
     else{ //When tree is not empty

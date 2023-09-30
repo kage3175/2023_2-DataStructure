@@ -29,6 +29,10 @@ public class MainBST_test {
     BST bst = new BST();
     buildBST(bst, args[0]);
 
+    AVL avl = new AVL();
+    buildBST(avl, args[0]);
+    
+
     System.out.println("Number of words in the BST: "+bst.size()
 		+" (number of insertions: "+bst.sumFreq()+")");
 
@@ -37,6 +41,11 @@ public class MainBST_test {
 		+bst.sumWeightedPath());
     bst.resetCounters();
     probeBST(bst,args[1]);
+
+    System.out.println("Sum of Weighted Path Lengths (AVL): "
+		+avl.sumWeightedPath());
+    avl.resetCounters();
+    probeBST(avl,args[1]);
 
     Runtime runtime = Runtime.getRuntime();
     System.out.println("Memory consumption: "
@@ -75,8 +84,8 @@ public class MainBST_test {
     bst.print();
     String bstType = "BST";
     if (bst instanceof AVL) bstType = "AVL";
-    else if (bst.NOBSTified == true) bstType = "NOBST";
-    else if (bst.OBSTified == true) bstType = "OBST";
+    //else if (bst.NOBSTified == true) bstType = "NOBST";
+    //else if (bst.OBSTified == true) bstType = "OBST";
 
     System.out.println("Total number of node accesses ("+bstType+"): "
 		+bst.sumProbes()+" (failed searches: "+notfound+")");
