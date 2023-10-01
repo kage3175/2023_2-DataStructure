@@ -105,7 +105,7 @@ public class BST { // Binary Search Tree implementation
     }
   } //End of insert
 
-  public void print(PrintWriter pw) { //print in Inorder
+  public void print() { //print in Inorder
     if(root == null){
       return;
     }
@@ -118,7 +118,6 @@ public class BST { // Binary Search Tree implementation
       }
       currNode = stack.pop();
       System.out.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]");
-      pw.println("[" + currNode.key + ":" + currNode.frequency + ":" + currNode.access_count + "]");
       currNode = currNode.right;
     }
   } //End of print
