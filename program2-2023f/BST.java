@@ -8,7 +8,7 @@ public class BST { // Binary Search Tree implementation
   protected boolean NOBSTified = false;
   protected boolean OBSTified = false;
   protected Node root;
-  int size_tree = 0;
+  public int size_tree = 0;
 
   protected class Node {
     String key;
@@ -122,8 +122,110 @@ public class BST { // Binary Search Tree implementation
     }
   } //End of print
 
-  public void nobst() { }	// Set NOBSTified to true.
-  public void obst() { }	// Set OBSTified to true.
+  public Node buildOBST(int[][] r ,Node[] nodelst, int left, int right, int level){
+    if(right < 1 || left > size_tree || left > right){ //End case
+      return null;
+    }
+    int index;
+    index = r[left][right];
+    Node node = nodelst[index];
+    node.level = level;
+    node.left = buildOBST(r, nodelst, left, index - 1, level+1);
+    node.right = buildOBST(r, nodelst, index + 1, right, level+1);
+    return node;
+    //node.left = buildOBST(r, nodelst, left, right);
+    //return node;
+  }
+
+  public void nobst() {
+    NOBSTified = true;
+    Node[] nodelst = new Node[size_tree+1]; // Reading inorder, so it will be sorted by its key
+    Stack<Node> stack = new Stack<>();
+    Node currNode = root;
+    int cnt=1;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      nodelst[cnt++] = currNode;
+      currNode = currNode.right;
+    }
+    p
+
+  }	// Set NOBSTified to true.
+  public void obst() {
+    OBSTified = true;
+    Node[] nodelst = new Node[size_tree+1]; // Reading inorder, so it will be sorted by its key
+    Stack<Node> stack = new Stack<>();
+    Node currNode = root;
+    int cnt=1;
+    while(currNode != null || !stack.empty()){
+      while(currNode != null){
+        stack.push(currNode);
+        currNode = currNode.left;
+      }
+      currNode = stack.pop();
+      nodelst[cnt++] = currNode;
+      currNode = currNode.right;
+    }
+    long[][] c = new long[size_tree+2][size_tree+1];
+    int[][] r = new int[size_tree+2][size_tree+1]; //r contains the index of corresponding node
+    for(int i = 0; i < size_tree+2; i++){ //initialize
+      for(int j = 0; j < size_tree+1; j++){
+        if(i == j && i != 0) {
+          c[i][j] = nodelst[i].frequency;
+          r[i][j] = i;
+        }
+        else {
+          c[i][j] = 0;
+          r[i][j] = 0;
+        }
+      }
+    }
+    long min_value = 0;
+    long value = 0;
+    long sigmap = 0;
+    for(int gap = 1; gap < size_tree; gap++){ //대각선으로 채우기
+      for (int left = 1; left <= size_tree - gap;left++){ //C(left, left+gap)
+        min_value = c[left][left-1] + c[left+1][left+gap]; //k = left case
+        r[left][left+gap] = left;
+        for(int k = left + 1;k <= left + gap;k++){
+          value = c[left][k - 1] + c[k+1][left + gap];
+          if(value < min_value){ //min case
+            min_value = value;
+            r[left][left+gap] = k;
+          }
+        }
+        sigmap = 0;
+        for(int k=left;k<=left+gap;k++){
+          sigmap += nodelst[k].frequency;
+        }
+        c[left][left+gap] = min_value + sigmap;
+        //C[left][left+gap] = min(C[i][k-1] + C[k+1][j]) + sigma p
+      }
+    }
+
+    /*for(int i = 0; i < size_tree+2;i++){
+      for(int j = 0; j < size_tree+1;j++){
+        System.out.print(c[i][j] + "\t");
+      }
+      System.out.println("");
+    }
+    System.out.println("");
+    for(int i = 0; i < size_tree+2;i++){
+      for(int j = 0; j < size_tree+1;j++){
+        System.out.print(r[i][j] + "\t");
+      }
+      System.out.println("");
+    }*/
+    //System.out.println(nodelst[r[1][4]].key);
+    root = buildOBST(r, nodelst, 1, size_tree, 1);
+    //System.out.println(root.left.key+ " " + root.key);
+
+    //C[i][j] = min(C[i][k-1] + C[k+1][j]) + sigma p
+  }	// Set OBSTified to true.
 
   public void resetCounters() {
     if(root == null){

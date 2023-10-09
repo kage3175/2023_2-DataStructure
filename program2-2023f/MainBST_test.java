@@ -37,10 +37,11 @@ public class MainBST_test {
     BST bst = new BST();
     buildBST(bst, args[0]);
 
+    BST obst = new BST();
+    buildBST(obst, args[0]);
+
     AVL avl = new AVL();
     buildBST(avl, args[0]);
-    
-
     System.out.println("Number of words in the BST: "+bst.size()
 		+" (number of insertions: "+bst.sumFreq()+")");
     //pw.println("Number of words in the BST: "+bst.size()
@@ -60,6 +61,18 @@ public class MainBST_test {
 		//+avl.sumWeightedPath());
     avl.resetCounters();
     probeBST(avl,args[1]);
+
+    // (4) Transform the other BST to an OBST and repeat probing.
+    cputime = TMB.getCurrentThreadCpuTime();
+    obst.obst();
+    cputime = TMB.getCurrentThreadCpuTime() - cputime;
+    System.out.println("CPU time to convert to an OBST: "
+		+(cputime/1000000)+" millisec");
+    System.out.println("Sum of Weighted Path Lengths (OBST): "
+		+obst.sumWeightedPath());
+
+    obst.resetCounters();
+    probeBST(obst,args[1]);
 
     Runtime runtime = Runtime.getRuntime();
     System.out.println("Memory consumption: "
@@ -105,7 +118,7 @@ public class MainBST_test {
     String bstType = "BST";
     if (bst instanceof AVL) bstType = "AVL";
     //else if (bst.NOBSTified == true) bstType = "NOBST";
-    //else if (bst.OBSTified == true) bstType = "OBST";
+    else if (bst.OBSTified == true) bstType = "OBST";
 
     System.out.println("Total number of node accesses ("+bstType+"): "
 		+bst.sumProbes()+" (failed searches: "+notfound+")");
