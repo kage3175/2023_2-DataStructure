@@ -148,12 +148,13 @@ public class BST { // Binary Search Tree implementation
     }
     long min = accumule[right];
     int k = left;
-    long temp = accumule[k-1] + accumule[k] - accumule[right];
+    long leftout = accumule[left - 1];
+    long temp = accumule[k-1] - leftout + accumule[k] - accumule[right];
     while(temp < min && temp > -min){
       k++;
       if(k > size_tree) break;
       min = (temp > 0) ? temp:-temp;
-      temp = accumule[k-1] + accumule[k] - accumule[right];
+      temp = accumule[k-1] - leftout + accumule[k] - accumule[right];
 
     }
     k--;
