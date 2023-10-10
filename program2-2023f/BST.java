@@ -30,6 +30,18 @@ public class BST { // Binary Search Tree implementation
     }
   }
 
+  protected class OBSTFrame {
+    Node parent;
+    int left;
+    int right;
+
+    public OBSTFrame(int leftInt, int rightInt, Node node_){
+      parent = node_;
+      left = leftInt;
+      right = rightInt;
+    }
+  }
+
   public BST() {
     root = null;
   }
@@ -133,8 +145,35 @@ public class BST { // Binary Search Tree implementation
     node.left = buildOBST(r, nodelst, left, index - 1, level+1);
     node.right = buildOBST(r, nodelst, index + 1, right, level+1);
     return node;
-    //node.left = buildOBST(r, nodelst, left, right);
-    //return node;
+  }
+
+  public void temp_build(int[][] r, Node[] nodelst){
+    Stack<OBSTFrame> stack = new Stack<>();
+    Node currNode = null;
+    stack.push(new OBSTFrame(1, size_tree, null));
+    while(!stack.isEmpty()){
+      OBSTFrame frame = stack.pop();
+      int left = frame.left;
+      int right = frame.right;
+      int index = r[left][right];
+      if(right < 1 || left > size_tree || left > right){
+        continue;
+      }
+
+      Node node = nodelst[index];
+      if(frame.parent == null){
+        root = node;
+      }else{
+        if(frame.parent.left == null){
+          frame.parent.left = node;
+        }
+        else{
+          frame.parent.right = node;
+        }
+      }
+      stack.push(new OBSTFrame(index + 1, right, node));
+      stack.push(new OBSTFrame(left, index - 1, node));
+    }
   }
 
   public Node buildNobst(long[] accumule, Node[] nodelst, int left, int right, int level){
@@ -200,6 +239,8 @@ public class BST { // Binary Search Tree implementation
         currNode = currNode.left;
       }
       currNode = stack.pop();
+      /*currNode.left = null;
+      currNode.right = null;*/
       nodelst[cnt++] = currNode;
       currNode = currNode.right;
     }
@@ -207,6 +248,7 @@ public class BST { // Binary Search Tree implementation
     int[][] r = new int[size_tree+2][size_tree+1]; //r contains the index of corresponding node
     for(int i = 0; i < size_tree+2; i++){ //initialize
       for(int j = 0; j < size_tree+1; j++){
+        //if(i >= 2147483642) System.out.println("oops");
         if(i == j && i != 0) {
           c[i][j] = nodelst[i].frequency;
           r[i][j] = i;
@@ -236,28 +278,10 @@ public class BST { // Binary Search Tree implementation
           sigmap += nodelst[k].frequency;
         }
         c[left][left+gap] = min_value + sigmap;
-        //C[left][left+gap] = min(C[i][k-1] + C[k+1][j]) + sigma p
       }
     }
-
-    /*for(int i = 0; i < size_tree+2;i++){
-      for(int j = 0; j < size_tree+1;j++){
-        System.out.print(c[i][j] + "\t");
-      }
-      System.out.println("");
-    }
-    System.out.println("");
-    for(int i = 0; i < size_tree+2;i++){
-      for(int j = 0; j < size_tree+1;j++){
-        System.out.print(r[i][j] + "\t");
-      }
-      System.out.println("");
-    }*/
-    //System.out.println(nodelst[r[1][4]].key);
     root = buildOBST(r, nodelst, 1, size_tree, 1);
-    //System.out.println(root.left.key+ " " + root.key);
-
-    //C[i][j] = min(C[i][k-1] + C[k+1][j]) + sigma p
+    //temp_build(r, nodelst);
   }	// Set OBSTified to true.
 
   public void resetCounters() {
@@ -334,9 +358,6 @@ public class BST { // Binary Search Tree implementation
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      /*if(NOBSTified){
-        System.out.println(currNode.key);
-      }*/
       wp += currNode.level * currNode.frequency;
       currNode = currNode.right;
     }

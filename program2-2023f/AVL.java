@@ -9,7 +9,7 @@ public class AVL extends BST{
     root.height = 1 + Math.max(height(root.left), height(root.right));
   }
 
-  public void updateLevel(Node node, int factor){
+  /*public void updateLevel(Node node, int factor){
     Stack<Node> stack = new Stack<>();
     Node currNode = node;
     while(currNode != null || !stack.empty()){
@@ -21,6 +21,13 @@ public class AVL extends BST{
       currNode.level += factor;
       currNode = currNode.right;
     }
+  }*/
+
+  public void updateLevel(Node node, int level){
+    if(node == null) return;
+    node.level = level;
+    updateLevel(node.left, level+1);
+    updateLevel(node.right, level+1);
   }
 
   public Node rightRotate(Node z){
@@ -33,8 +40,6 @@ public class AVL extends BST{
 
     y.level--;
     z.level++;
-    updateLevel(z.right, 1);
-    updateLevel(y.left, -1);
 
     z.height = 1 + Math.max(height(z.right), height(b));
     y.height = 1 + Math.max(height(z), height(y.left));
@@ -54,8 +59,6 @@ public class AVL extends BST{
 
     y.level--;
     z.level++;
-    updateLevel(z.left, 1);
-    updateLevel(y.right, -1);
 
     z.height = 1 + Math.max(height(z.left), height(z.right));
     y.height = 1 + Math.max(height(y.left), height(y.right));
@@ -119,34 +122,18 @@ public class AVL extends BST{
           //System.out.println("track: " + node.key + " " + balance);
 
           if(balance > 1 && node.left.key.compareTo(key) > 0){ //LL
-            //System.out.println("---- Before LL ----");
-            //print();
             node = rightRotate(node);
-            //System.out.println("---- After LL ----");
-            //print();
           }
           else if(balance > 1 && node.left.key.compareTo(key) < 0){ //LR
-            //System.out.println("---- Before LR ----");
-            //print();
             node.left = leftRotate(node.left);
             node = rightRotate(node);
-            //System.out.println("---- After LR ----");
-            //print();
           }
           else if(balance < -1 && node.right.key.compareTo(key) < 0){ //RR
-            //System.out.println("---- Before RR ----");
-            //print();
             node = leftRotate(node);
-            //System.out.println("---- After RR ----");
-            //print();
           }
           else if(balance < -1 && node.right.key.compareTo(key) > 0){ //RL
-            //System.out.println("---- Before RL ----");
-            //print();
             node.right = rightRotate(node.right);
             node = leftRotate(node);
-            //System.out.println("---- After RL ----");
-            //print();
           }
 
           if(!stack.isEmpty()){ //update parent node, especially for the case of rotation. If rotation didn't occr, then it will change nothing.
@@ -161,6 +148,7 @@ public class AVL extends BST{
             }
           }
         }
+        updateLevel(root, 1);
       }
     }
   }
