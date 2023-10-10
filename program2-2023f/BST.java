@@ -137,9 +137,23 @@ public class BST { // Binary Search Tree implementation
     //return node;
   }
 
+  public Node buildNobst(int[] accumule, Node[] nodelst, int left, int right){
+    if(left > right) return null;
+    if(left == right) return nodelst[left];
+    long min = accumule[right] - accumule[left];
+    int k = left + 1;
+    long temp = 2 * accumule[k] - accumule[left] - accumule[right];
+    while(temp < min && temp > -min){
+      temp = temp - 2*accumule[k] + 2*accumule[++k];
+      min = ()
+    }
+  }
+
   public void nobst() {
     NOBSTified = true;
     Node[] nodelst = new Node[size_tree+1]; // Reading inorder, so it will be sorted by its key
+    long[] accumule = new long[size_tree+1];
+    accumule[0] = 0;
     Stack<Node> stack = new Stack<>();
     Node currNode = root;
     int cnt=1;
@@ -152,7 +166,9 @@ public class BST { // Binary Search Tree implementation
       nodelst[cnt++] = currNode;
       currNode = currNode.right;
     }
-    p
+    for(int i = 1; i<= size_tree;i++){
+      accumule[i] = accumule[i-1] + nodelst[i].frequency;
+    }
 
   }	// Set NOBSTified to true.
   public void obst() {
