@@ -56,6 +56,7 @@ public class MainBst {
     cputime = TMB.getCurrentThreadCpuTime() - cputime;
     System.out.println("CPU time to convert to an NOBST: "
 		+(cputime/1000000)+" millisec");
+    //System.out.println(nobst.root.key + " " + nobst.root.right.key + " " + nobst.root.left.right.key + " " +nobst.root.right.right.key);
     System.out.println("Sum of Weighted Path Lengths (NOBST): "
 		+nobst.sumWeightedPath());
 

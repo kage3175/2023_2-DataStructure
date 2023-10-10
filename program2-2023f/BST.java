@@ -137,16 +137,31 @@ public class BST { // Binary Search Tree implementation
     //return node;
   }
 
-  public Node buildNobst(int[] accumule, Node[] nodelst, int left, int right){
+  public Node buildNobst(long[] accumule, Node[] nodelst, int left, int right, int level){
     if(left > right) return null;
-    if(left == right) return nodelst[left];
-    long min = accumule[right] - accumule[left];
-    int k = left + 1;
-    long temp = 2 * accumule[k] - accumule[left] - accumule[right];
-    while(temp < min && temp > -min){
-      temp = temp - 2*accumule[k] + 2*accumule[++k];
-      min = ()
+    if(left == right){
+      Node node = nodelst[left];
+      node.level = level;
+      node.left = null;
+      node.right = null;
+      return node;
     }
+    long min = accumule[right];
+    int k = left;
+    long temp = accumule[k-1] + accumule[k] - accumule[right];
+    while(temp < min && temp > -min){
+      k++;
+      if(k > size_tree) break;
+      min = (temp > 0) ? temp:-temp;
+      temp = accumule[k-1] + accumule[k] - accumule[right];
+
+    }
+    k--;
+    Node node = nodelst[k];
+    node.level = level;
+    node.left = buildNobst(accumule, nodelst, left, k-1, level+1);
+    node.right = buildNobst(accumule, nodelst, k+1, right, level+1);
+    return node;
   }
 
   public void nobst() {
@@ -169,6 +184,7 @@ public class BST { // Binary Search Tree implementation
     for(int i = 1; i<= size_tree;i++){
       accumule[i] = accumule[i-1] + nodelst[i].frequency;
     }
+    root = buildNobst(accumule, nodelst, 1, size_tree, 1);
 
   }	// Set NOBSTified to true.
   public void obst() {
@@ -317,6 +333,9 @@ public class BST { // Binary Search Tree implementation
         currNode = currNode.left;
       }
       currNode = stack.pop();
+      /*if(NOBSTified){
+        System.out.println(currNode.key);
+      }*/
       wp += currNode.level * currNode.frequency;
       currNode = currNode.right;
     }
