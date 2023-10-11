@@ -5,8 +5,8 @@ import java.io.*;
 
 public class BST { // Binary Search Tree implementation
 
-  protected boolean NOBSTified = false;
-  protected boolean OBSTified = false;
+  public boolean NOBSTified = false;
+  public boolean OBSTified = false;
   protected Node root;
   public int size_tree = 0;
 
@@ -149,7 +149,7 @@ public class BST { // Binary Search Tree implementation
 
   public void temp_build(int[][] r, Node[] nodelst){
     Stack<OBSTFrame> stack = new Stack<>();
-    Node currNode = null;
+    //Node currNode = null;
     stack.push(new OBSTFrame(1, size_tree, null));
     while(!stack.isEmpty()){
       OBSTFrame frame = stack.pop();
@@ -233,51 +233,43 @@ public class BST { // Binary Search Tree implementation
     Stack<Node> stack = new Stack<>();
     Node currNode = root;
     int cnt=1;
+    int[] freq = new int[size_tree+1];
+    int[] fsum = new int[size_tree+1];
+    freq[0] = 0;fsum[0] = 0;
     while(currNode != null || !stack.empty()){
       while(currNode != null){
         stack.push(currNode);
         currNode = currNode.left;
       }
       currNode = stack.pop();
-      /*currNode.left = null;
-      currNode.right = null;*/
       nodelst[cnt++] = currNode;
+      freq[cnt-1] = currNode.frequency;
       currNode = currNode.right;
     }
     long[][] c = new long[size_tree+2][size_tree+1];
     int[][] r = new int[size_tree+2][size_tree+1]; //r contains the index of corresponding node
-    for(int i = 0; i < size_tree+2; i++){ //initialize
-      for(int j = 0; j < size_tree+1; j++){
-        //if(i >= 2147483642) System.out.println("oops");
-        if(i == j && i != 0) {
-          c[i][j] = nodelst[i].frequency;
-          r[i][j] = i;
-        }
-        else {
-          c[i][j] = 0;
-          r[i][j] = 0;
-        }
-      }
+    for(int i = 1; i< size_tree+1; i++){
+      c[i][i] = freq[i];
+      fsum[i] = fsum[i-1] + freq[i];
+      r[i][i] = i;
     }
     long min_value = 0;
     long value = 0;
-    long sigmap = 0;
     for(int gap = 1; gap < size_tree; gap++){ //대각선으로 채우기
       for (int left = 1; left <= size_tree - gap;left++){ //C(left, left+gap)
-        min_value = c[left][left-1] + c[left+1][left+gap]; //k = left case
-        r[left][left+gap] = left;
-        for(int k = left + 1;k <= left + gap;k++){
-          value = c[left][k - 1] + c[k+1][left + gap];
+        int right = left + gap;
+        min_value = c[left][left-1] + c[left+1][right]; //k = left case
+        r[left][right] = left;
+        int leftmost = r[left][right-1];
+        int rightmost = r[left+1][right];
+        for(int k = leftmost;k <= rightmost;k++){
+          value = c[left][k - 1] + c[k+1][right];
           if(value < min_value){ //min case
             min_value = value;
-            r[left][left+gap] = k;
+            r[left][right] = k;
           }
         }
-        sigmap = 0;
-        for(int k=left;k<=left+gap;k++){
-          sigmap += nodelst[k].frequency;
-        }
-        c[left][left+gap] = min_value + sigmap;
+        c[left][right] = min_value + fsum[right] - fsum[left - 1];
       }
     }
     root = buildOBST(r, nodelst, 1, size_tree, 1);
