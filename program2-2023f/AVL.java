@@ -9,20 +9,6 @@ public class AVL extends BST{
     root.height = 1 + Math.max(height(root.left), height(root.right));
   }
 
-  /*public void updateLevel(Node node, int factor){
-    Stack<Node> stack = new Stack<>();
-    Node currNode = node;
-    while(currNode != null || !stack.empty()){
-      while(currNode != null){
-        stack.push(currNode);
-        currNode = currNode.left;
-      }
-      currNode = stack.pop();
-      currNode.level += factor;
-      currNode = currNode.right;
-    }
-  }*/
-
   public void updateLevel(Node node, int level){
     if(node == null) return;
     node.level = level;
@@ -97,7 +83,6 @@ public class AVL extends BST{
           present_node = present_node.right;
         }
         else{
-          //System.out.println(present_node.key);
           present_node.frequency++;
           flag = true;
           break;
@@ -119,7 +104,6 @@ public class AVL extends BST{
           Node node = stack.pop();
           updateHeight(node);
           int balance = getBalance(node);
-          //System.out.println("track: " + node.key + " " + balance);
 
           if(balance > 1 && node.left.key.compareTo(key) > 0){ //LL
             node = rightRotate(node);
@@ -140,10 +124,8 @@ public class AVL extends BST{
             Node parentNode = stack.peek();
             if(parentNode.key.compareTo(key) > 0){
               parentNode.left = node;
-              //System.out.println(parentNode.key + "  " + node.key);
             }
             else{
-              //System.out.println(parentNode.key + "  " + node.key);
               parentNode.right = node;
             }
           }

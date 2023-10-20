@@ -258,11 +258,10 @@ public class BST { // Binary Search Tree implementation
     for(int gap = 1; gap < size_tree; gap++){ //대각선으로 채우기
       for (int left = 1; left <= size_tree - gap;left++){ //C(left, left+gap)
         int right = left + gap;
-        min_value = c[left][left-1] + c[left+1][right]; //k = left case
+        min_value = Long.MAX_VALUE; //k = left case
         r[left][right] = left;
-        int leftmost = r[left][right-1];
         int rightmost = r[left+1][right];
-        for(int k = leftmost;k <= rightmost;k++){
+        for(int k = r[left][right-1];k <= rightmost;k++){
           value = c[left][k - 1] + c[k+1][right];
           if(value < min_value){ //min case
             min_value = value;
