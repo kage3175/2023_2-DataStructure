@@ -7,6 +7,20 @@ public class Itinerary
 
   String[][] planned;
   // constructor
+
+  public class Time{
+    int hr;
+    int min;
+    int time;
+    int day;
+    public Time(String t, int d){
+      hr = Integer.parseInt(t) / 100;
+      min = Integer.parseInt(t) % 100;
+      time = min + hr * 60;
+      day = d;
+    }
+  }
+
   Itinerary(String[][] plan) {
     planned = plan.clone();
   }
