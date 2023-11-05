@@ -2,7 +2,7 @@
 
 import java.util.LinkedList;
 
-public class Planner {
+public class Planner {// All time variable is minute-based, from 0 to 1439(which is 23hrs 59min)
 
   // constructor
   public Planner(LinkedList<Airport> portList, LinkedList<Flight> fltList) {}
