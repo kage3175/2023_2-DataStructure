@@ -16,8 +16,8 @@ public class Itinerary
     public Time(String t, int d){
       hr = Integer.parseInt(t) / 100;
       min = Integer.parseInt(t) % 100;
-      time = min + hr * 60;
       day = d;
+      time = min + hr * 60 + d * 1440;
     }
   }
 
