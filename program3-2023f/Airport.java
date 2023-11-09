@@ -14,6 +14,15 @@ public class Airport {
     code = new String(port);
   }	// constructor
 
+  public String getAirportName(){
+    return code;
+  }
+  public String getConnect(){
+    return connect;
+  }
+  public String getCode(){
+    return code;
+  }
   public void print() {
     System.out.println(code + " " + connect);
   }
