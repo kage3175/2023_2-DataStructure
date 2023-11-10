@@ -70,6 +70,7 @@ public class Planner {// All time variable is minute-based, from 0 to 1439(which
         day+=1;
       }
       time = min + hr * 60 + day * 1440;
+      time_onlyhrmin = min + 60*hr;
     }
   }
 
@@ -140,19 +141,32 @@ public class Planner {// All time variable is minute-based, from 0 to 1439(which
       if(earliestArrive[idx]==null){ // If earliestArrive of the arriving airport is not updated at all yet
         earliestArrive[idx] = arrTime;
         previous[idx] = f;
+        //System.out.println("New: " + f.getArriveAirport() + " " + arrTime.getTime());
       }else if(earliestArrive[idx].getTime() > arrTime.getTime()){ // If update is needed
         earliestArrive[idx] = arrTime;
         previous[idx] = f;
+        //System.out.println("Update: " + f.getArriveAirport() + " " + arrTime.getTime());
       }
       tmp = tmp.next;
     }
   }
 
   public Itinerary Schedule(String start, String end, String departure) {
+    Itinerary iti = null;
     Airport startAirport = mapAirportName.get(start);
     Airport endAirport = mapAirportName.get(end);
-    int startIdx = mapAirport.get(startAirport);
-    int endIdx = mapAirport.get(endAirport);
+    int startIdx = 0;
+    int endIdx = 0;
+    try{
+      startIdx = mapAirport.get(startAirport);
+    }catch(NullPointerException e){
+      return new Itinerary(null);
+    }
+    try{
+      endIdx = mapAirport.get(endAirport);
+    }catch(NullPointerException e){
+      return new Itinerary(null);
+    }
     Time departTime = new Time(departure, 0);
     Arrays.fill(earliestArrive, null);
     Arrays.fill(visited, false);
@@ -179,31 +193,34 @@ public class Planner {// All time variable is minute-based, from 0 to 1439(which
       int idx = findMin();
       if(idx==-1){
         //When no such plan is available
+        iti = null;
+        break;
       }else if(idx == endIdx){
         //When the plan has been made
         
         Flight tmp = previous[idx];
-        LinkedList<Flight> ticket = new LinkedList<Flight>(Arrays.asList(tmp));
+        LinkedList<Flight> ticket = new LinkedList<Flight>();
+        ticket.add(tmp);
         while(true){
-          if(tmp.getDepartAirport().equals(startAirport.getCode())){break;}
+          if(tmp.getDepartAirport().equals(startAirport.getAirportName())){break;}
           Airport departAirport = mapAirportName.get(tmp.getDepartAirport());
           tmp = previous[mapAirport.get(departAirport)];
           ticket.add(tmp);
         }
-        Itinerary iti = new Itinerary(ticket);
+        iti = new Itinerary(ticket);
         break;
       }else{
         visited[idx] = true;
         Airport currAirport = arrAirport[idx];
         Time currTime = earliestArrive[idx];
+        //System.out.println("Airport: " + currAirport.getAirportName() + " Before: " + currTime.getTime());
         currTime.add(currAirport.getConnect()); //Add connect time
+        //System.out.println(" After: " + currTime.getTime());
         updateArriveTime(currTime, currAirport);
       }
-
-
     }
 
-    return new Itinerary(null);
+    return iti;
   }
 
 }

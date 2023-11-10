@@ -20,8 +20,8 @@ public class Airport {
   public String getConnect(){
     return connect;
   }
-  public String getCode(){
-    return code;
+  public int getConnectTimeMin(){
+    return connectTime_min;
   }
   public void print() {
     System.out.println(code + " " + connect);
