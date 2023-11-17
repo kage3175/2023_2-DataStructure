@@ -48,7 +48,7 @@ public class Itinerary
     }
   }
 
-  Itinerary(LinkedList<Flight> ticket) {
+  public Itinerary(LinkedList<Flight> ticket) {
     planned = ticket;
   }
 

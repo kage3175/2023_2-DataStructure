@@ -172,18 +172,6 @@ public class Planner {// All time variable is minute-based, from 0 to 1439(which
     Arrays.fill(visited, false);
     earliestArrive[startIdx] = departTime;
     visited[startIdx] = true;
-    //LL tmp = adListFlight[startIdx];
-    /*while(tmp!=null){
-      Flight f = tmp.getKey();
-      Time arrTime = possibleArrive(f, departTime, 0);
-      int idx =mapAirport.get(mapAirportName.get(f.getArriveAirport()));
-      if(earliestArrive[idx]==null){ // If earliestArrive of the arriving airport is not updated at all yet
-        earliestArrive[idx] = arrTime;
-      }else if(earliestArrive[idx].getTime() > arrTime.getTime()){ // If update is needed
-        earliestArrive[idx] = arrTime;
-      }
-      tmp = tmp.next;
-    } //Initialize End*/
     updateArriveTime(departTime, startAirport);
     for(int i = 0; i < numAirport-1;i++){ //dijkstra
       //idx = findMin by (arriveTime of arriving airport)
@@ -213,9 +201,7 @@ public class Planner {// All time variable is minute-based, from 0 to 1439(which
         visited[idx] = true;
         Airport currAirport = arrAirport[idx];
         Time currTime = earliestArrive[idx];
-        //System.out.println("Airport: " + currAirport.getAirportName() + " Before: " + currTime.getTime());
         currTime.add(currAirport.getConnect()); //Add connect time
-        //System.out.println(" After: " + currTime.getTime());
         updateArriveTime(currTime, currAirport);
       }
     }
